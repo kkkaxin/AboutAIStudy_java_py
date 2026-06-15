@@ -2,12 +2,13 @@
 
 ## 项目总览
 
-本仓库包含两个独立的 Java Spring Boot 项目：
+本仓库包含三个主要项目：
 
-- `smart-approval`：企业级 AI 审批系统，基于 Spring AI Function Calling，支持 AI 自动审批建议、审批流程、JWT 鉴权、角色权限和限流。
-- `smartdoc`：企业级 AI 知识库问答系统，基于 Spring AI + Ollama + ChromaDB，支持文档上传、RAG 检索增强生成、SSE 流式问答和多轮对话。
+- `smart-approval`：Java 企业级 AI 审批系统，基于 Spring AI Function Calling，支持 AI 自动审批建议、审批流程、JWT 鉴权、角色权限和限流。
+- `smart-approval-py`：Python 版本审批系统入口，基于 FastAPI + Uvicorn，包含启动脚本、依赖说明和示例 SQLite 数据库。
+- `smartdoc`：Java 企业级 AI 知识库问答系统，基于 Spring AI + Ollama + ChromaDB，支持文档上传、RAG 检索增强生成、SSE 流式问答和多轮对话。
 
-两个项目均使用 Java 17、Spring Boot 3.3、Spring Security、MySQL、JWT，并通过本地 Ollama 模型实现 AI 功能。
+Java 项目均使用 Java 17、Spring Boot 3.3、Spring Security、MySQL、JWT，并通过本地 Ollama 模型实现 AI 功能。`smart-approval-py` 则使用 Python 3、FastAPI 和 SQLite 作为轻量级演示入口。
 
 ---
 
@@ -16,8 +17,9 @@
 ```
 AboutAIStudy_java_py/
 ├── README.md
-├── smart-approval/           # AI 审批系统
-├── smartdoc/                 # AI 知识库问答系统
+├── smart-approval/           # Java AI 审批系统
+├── smart-approval-py/        # Python AI 审批系统入口
+├── smartdoc/                 # Java AI 知识库问答系统
 └── uploads/                  # 示例文档上传存储（仅 smartdoc 可能使用）
 ```
 
@@ -29,6 +31,8 @@ AboutAIStudy_java_py/
 2. 安装 Maven
 3. 准备 MySQL 数据库
 4. 安装并运行 Ollama（用于本地模型推理）
+5. 安装 Python 3.13+（用于 `smart-approval-py`）
+6. 可选：创建 Python 虚拟环境并安装 `smart-approval-py/requirements.txt`
 
 ---
 
@@ -99,6 +103,46 @@ mvn spring-boot:run
 - `com.smartapproval.function`：AI Function Calling 业务函数
 - `com.smartapproval.security`：JWT 鉴权与安全过滤
 - `com.smartapproval.config`：Spring Security、AI 客户端、限流拦截
+
+---
+
+## smart-approval-py
+
+### 项目简介
+
+`smart-approval-py` 是 `smart-approval` 的 Python 版本入口，基于 FastAPI 和 Uvicorn，适合作为轻量级演示或快速原型。目录中包含启动脚本 `run.py`、依赖说明 `requirements.txt` 和示例 SQLite 数据库 `smart_approval.db`。
+
+### 技术栈
+
+- Python 3.13+
+- FastAPI
+- Uvicorn
+- SQLAlchemy
+- Pydantic
+- bcrypt
+- python-jose（JWT）
+- httpx
+
+### 核心内容
+
+- 启动脚本：`run.py`
+- 依赖文件：`requirements.txt`
+- 示例数据库：`smart_approval.db`
+- Windows 启动脚本：`start.bat`
+
+### 运行方式
+
+```bash
+cd smart-approval-py
+python3 run.py
+```
+
+默认访问：`http://localhost:8081`
+
+### 说明
+
+- `run.py` 会通过 Uvicorn 启动 `app.main:app`，请确保项目中补充了 `app/` 源码目录和 FastAPI 应用实现。
+- `smart_approval.db` 为示例 SQLite 数据库，可用于快速演示或本地开发。
 
 ---
 
@@ -184,8 +228,10 @@ mvn spring-boot:run
 
 1. 如果需要启动本地 Ollama，请先安装并拉取模型。
 2. smartdoc 还需要 ChromaDB 作为向量数据库，可用 Docker 启动。
-3. 两个项目的 MySQL 数据库需要分别初始化，并确保用户名密码与 `application.yml` 中配置一致。
-4. 若需要自定义端口或数据库连接，可编辑各项目的 `src/main/resources/application.yml`。
+3. 两个 Java 项目的 MySQL 数据库需要分别初始化，并确保用户名密码与 `application.yml` 中配置一致。
+4. `smart-approval-py` 需要 Python 3.13+ 环境，可使用虚拟环境安装 `requirements.txt`。
+5. 如果 `smart-approval-py` 目录中没有完整 `app/` 源码，请补充 FastAPI 应用代码或按目录结构创建对应模块。
+6. 若需要自定义端口或数据库连接，可编辑 Java 项目的 `src/main/resources/application.yml`。
 
 ---
 

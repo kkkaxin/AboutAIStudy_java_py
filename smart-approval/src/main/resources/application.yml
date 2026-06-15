@@ -1,0 +1,49 @@
+server:
+  port: 8081
+
+spring:
+  application:
+    name: smart-approval
+
+  # MySQL
+  datasource:
+    url: jdbc:mysql://localhost:3306/smart_approval?createDatabaseIfNotExist=true&useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=Asia/Shanghai&characterEncoding=utf-8
+    username: root
+    password: root
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+  # JPA
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+        dialect: org.hibernate.dialect.MySQLDialect
+
+  # AI - Ollama
+  ai:
+    ollama:
+      base-url: http://localhost:11434
+      chat:
+        model: llama3.2
+        options:
+          temperature: 0.3
+          top-p: 0.9
+
+# JWT
+jwt:
+  secret: c21hcnQtYXBwcm92YWwtand0LXNlY3JldC1rZXktMjAyNC0wMS0xNS1t
+  expiration: 86400000
+
+# 审批系统配置
+approval:
+  # AI审批超时(ms)
+  ai-timeout: 30000
+  # 单用户每分钟最大审批请求数
+  rate-limit:
+    per-minute: 10
+  # 是否启用AI自动审批建议
+  ai-suggestion:
+    enabled: true

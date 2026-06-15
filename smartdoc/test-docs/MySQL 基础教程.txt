@@ -1,0 +1,89 @@
+MySQL 数据库基础教程
+
+## 第一章：MySQL 简介
+
+MySQL 是一个关系型数据库管理系统，由瑞典 MySQL AB 公司开发，目前属于 Oracle 公司。MySQL 是最流行的关系型数据库管理系统之一，特别是在 Web 应用开发领域。
+
+### MySQL 的特点
+
+1. **开源免费**：社区版完全免费
+2. **性能卓越**：执行速度快，性能稳定
+3. **易于使用**：学习曲线平缓，文档丰富
+4. **支持广泛**：支持多种操作系统和编程语言
+5. **可扩展性**：支持大规模数据处理
+
+## 第二章：基本 SQL 语句
+
+### 创建数据库
+```sql
+CREATE DATABASE mydb CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+```
+
+### 创建表
+```sql
+CREATE TABLE users (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    username VARCHAR(50) NOT NULL,
+    email VARCHAR(100) NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+```
+
+### 插入数据
+```sql
+INSERT INTO users (username, email) VALUES ('张三', 'zhangsan@example.com');
+INSERT INTO users (username, email) VALUES ('李四', 'lisi@example.com');
+```
+
+### 查询数据
+```sql
+SELECT * FROM users;
+SELECT id, username FROM users WHERE id = 1;
+```
+
+### 更新数据
+```sql
+UPDATE users SET email = 'newemail@example.com' WHERE id = 1;
+```
+
+### 删除数据
+```sql
+DELETE FROM users WHERE id = 1;
+```
+
+## 第三章：索引优化
+
+索引是提高数据库查询性能的重要手段。
+
+### 创建索引
+```sql
+CREATE INDEX idx_username ON users(username);
+CREATE UNIQUE INDEX idx_email ON users(email);
+```
+
+### 索引使用原则
+
+1. 在经常用于搜索的列上创建索引
+2. 在经常用于连接的列上创建索引
+3. 避免在经常更新的列上创建索引
+4. 避免在低基数的列上创建索引
+
+## 第四章：事务处理
+
+事务是数据库操作的基本单位，保证数据的一致性。
+
+### 事务的 ACID 特性
+
+1. **原子性（Atomicity）**：事务是一个不可分割的工作单位
+2. **一致性（Consistency）**：事务必须使数据库从一个一致性状态变换到另一个一致性状态
+3. **隔离性（Isolation）**：一个事务的执行不能被其他事务干扰
+4. **持久性（Durability）**：事务一旦提交，它对数据库中的数据的改变就是永久性的
+
+### 事务控制语句
+```sql
+START TRANSACTION;
+-- 执行一系列操作
+COMMIT;
+-- 或者回滚
+ROLLBACK;
+```

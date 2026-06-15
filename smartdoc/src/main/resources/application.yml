@@ -1,0 +1,59 @@
+server:
+  port: 8080
+
+spring:
+  datasource:
+    url: jdbc:mysql://localhost:3306/smartdoc?useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Shanghai
+    username: root
+    password: root   # 修改为你的数据库密码
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: false
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQL8Dialect
+        format_sql: true
+
+  servlet:
+    multipart:
+      max-file-size: 50MB
+      max-request-size: 50MB
+
+  # Spring AI - Ollama 配置
+  ai:
+    ollama:
+      base-url: http://localhost:11434   # Ollama 默认地址
+      chat:
+        model: llama3.2               # 推荐 qwen2.5:7b，对中文支持好
+        options:
+          temperature: 0.7
+          num-predict: 2048
+      embedding:
+        model: nomic-embed-text          # Embedding 模型（ollama pull nomic-embed-text）
+
+    # ChromaDB 向量数据库配置（独立服务器模式）
+    vectorstore:
+      chroma:
+        client:
+          host: http://127.0.0.1
+          port: 8000
+        collection-name: smartdoc_vectors
+        initialize-schema: true
+
+# 文件上传存储路径
+file:
+  upload-dir: ${user.dir}/uploads    # 上传文件保存目录（项目根目录下）
+
+# JWT 配置
+jwt:
+  secret: SmartDocSecretKey2024VeryLongSecretForHmacSHA256Algorithm   # 建议改成随机字符串
+  expiration: 86400000     # 24小时，单位毫秒
+
+# RAG 配置
+rag:
+  chunk-size: 500          # 文本分块大小（字符数）
+  chunk-overlap: 50        # 分块重叠大小
+  top-k: 5                 # 向量检索返回条数
